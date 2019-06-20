@@ -36,8 +36,30 @@ public class BocRateSpider {
     private static final String BOCSEARCHURL = "http://srh.bankofchina.com/search/whpj/search.jsp";
 
     public static void main(String[] args) {
-        List<BocRate> r=getBankExchangeRate("USD",null,null,-30);
+         String currency ="USD";
+        int index = 1;
+        String start =null;
+        String end =null;
+        if(args.length>=1 ){
+             currency = args[0];
+        }
+        if(args.length>=2 ){
+             try {
+                 index = Integer.parseInt(args[1]);
+             }catch (Exception e){
+                index = 1;
+             }
+        }
+        if(args.length>=3 ){
+             start = args[2];
+        }
+        if(args.length>=4 ){
+             end = args[3];
+        }
+
+        List<BocRate> r=getBankExchangeRate(currency,start,end,index);
         int i = 0;
+        System.out.println("货币名称\t现汇买入价\t现钞买入价\t现汇卖出价\t现钞卖出价\t中行折算价\t发布时间\t币种");
         for (BocRate v: r) {
             System.out.println(++i +","+ v.bocFormatString());
         }
@@ -365,7 +387,7 @@ public class BocRateSpider {
                     exchangeSale +","+
                     cashSale +","+
                      bocDisPrice +","+
-                     relesDate +","+
+                     relesDate +" "+
                      relesTime +","+
                       currency +"\n";
         }
